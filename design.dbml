@@ -1,0 +1,23 @@
+Table ingredients {
+  id uuid [pk]
+  name varchar
+}
+
+Table dishes {
+  id uuid [pk]
+  name varchar
+}
+
+Table recipes {
+  id uuid [pk]
+  name varchar [null]
+  dishId uuid [ref: > dishes.id]
+}
+
+Table recipeIngredients {
+  id uuid [pk]
+  step integer
+  amount varchar
+  ingredientId uuid [ref: > ingredients.id]
+  recipeId uuid [ref: > recipes.id]
+}

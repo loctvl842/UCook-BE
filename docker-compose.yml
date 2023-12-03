@@ -1,0 +1,46 @@
+version: '3.1'
+
+services:
+  app:
+    image: loctvl842/nest-seed
+    container_name: nest-seed
+    build: .
+    ports:
+      - 8402:8402
+    # command: ["yarn", "start:prod"]
+    tty: true
+    env_file: .env
+    environment:
+      - DB_HOST=database
+      - DB_USER=postgres
+      - DB_PASS=thangcho
+      - DB_NAME=nest_boilerplate
+      - DB_PORT=5432
+      - DB_TYPE=postgres
+    networks:
+      - postgres-network
+    volumes:
+      - .:/app
+  postgres:
+    image: postgres
+    container_name: nest-seed-postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres-network
+    hostname: database
+    environment:
+      POSTGRES_PASSWORD: thangcho
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+networks:
+  postgres-network:
+    driver: bridge
+    name: postgres-network
+
+volumes:
+  pgdata:
+    external: true
+    name: pgdata
