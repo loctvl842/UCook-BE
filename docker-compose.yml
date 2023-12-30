@@ -2,19 +2,18 @@ version: '3.1'
 
 services:
   app:
-    image: loctvl842/nest-seed
-    container_name: nest-seed
+    image: loctvl842/ucook-api
+    container_name: ucook-api
     build: .
     ports:
       - 8402:8402
-    # command: ["yarn", "start:prod"]
+    command: ["yarn", "start:prod"]
     tty: true
-    env_file: .env
     environment:
       - DB_HOST=database
       - DB_USER=postgres
       - DB_PASS=thangcho
-      - DB_NAME=nest_boilerplate
+      - DB_NAME=ucook
       - DB_PORT=5432
       - DB_TYPE=postgres
     networks:
@@ -23,7 +22,7 @@ services:
       - .:/app
   postgres:
     image: postgres
-    container_name: nest-seed-postgres
+    container_name: ucook-postgres
     restart: always
     ports:
       - "5432:5432"
