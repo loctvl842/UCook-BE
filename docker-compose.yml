@@ -7,7 +7,6 @@ services:
     build: .
     ports:
       - 8402:8402
-    command: ["yarn", "start:prod"]
     tty: true
     environment:
       - DB_HOST=database
@@ -41,5 +40,4 @@ networks:
 
 volumes:
   pgdata:
-    external: true
     name: pgdata

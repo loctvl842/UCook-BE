@@ -23,8 +23,6 @@ RUN apt-get update -y && \
 # Install yarn seperately due to `no-install-recommends` to skip nodejs install 
 RUN apt-get install -y --no-install-recommends yarn
 
-RUN npm i -g @nestjs/cli
-
 FROM base as build
 
 WORKDIR /www
@@ -33,16 +31,19 @@ COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN yarn install
 COPY . .
 
-# RUN rm -rf dist && yarn build && \
-#     yarn cache clean && \
-#     yarn autoclean --force
-#
-# FROM base as final
-#
-# WORKDIR /www
-# COPY --from=build /www/node_modules ./node_modules
-# COPY --from=build /www/dist ./dist
-# COPY --from=build /www/package.json ./package.json
-#
-# ENV RUN_MODE="docker"
-# ENV NODE_ENV = "production"
+RUN rm -rf dist && yarn build && \
+    yarn cache clean && \
+    yarn autoclean --force
+
+FROM base as final
+
+WORKDIR /www
+COPY --from=build /www/node_modules ./node_modules
+COPY --from=build /www/dist ./dist
+COPY --from=build /www/package.json ./package.json
+COPY --from=build /www/tsconfig.json ./tsconfig.json
+
+ENV RUN_MODE="docker"
+ENV NODE_ENV="production"
+
+CMD [ "yarn", "start:prod" ]
