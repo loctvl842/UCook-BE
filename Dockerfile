@@ -37,13 +37,18 @@ RUN rm -rf dist && yarn build && \
 
 FROM base as final
 
+RUN apt-get update && apt-get install -y git vim make
+
 WORKDIR /www
+
 COPY --from=build /www/node_modules ./node_modules
 COPY --from=build /www/dist ./dist
+COPY --from=build /www/src/database ./src/database
+COPY --from=build /www/Makefile ./Makefile
 COPY --from=build /www/package.json ./package.json
 COPY --from=build /www/tsconfig.json ./tsconfig.json
 
 ENV RUN_MODE="docker"
 ENV NODE_ENV="production"
 
-CMD [ "yarn", "start:prod" ]
+# CMD [ "yarn", "start:prod" ]

@@ -15,6 +15,7 @@ services:
       - DB_NAME=ucook
       - DB_PORT=5432
       - DB_TYPE=postgres
+    command: make run-server
     networks:
       - postgres-network
     volumes:
